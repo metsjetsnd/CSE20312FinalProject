@@ -1,5 +1,5 @@
 # CSE20312FinalProject
 
-Hello
+Shane Brosnan, Nathan Rao, and Joseph Spencer
 
-suh dude
+Final Project Description:
