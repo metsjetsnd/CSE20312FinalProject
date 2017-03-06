@@ -1,0 +1,33 @@
+Joseph Spencer
+Project Milestones
+CSE 20312
+
+Milestones for our stock market simulator/predictor project:
+
+- Do research about the stock market and try to learn more about various
+equations that are currently used to predict the stock market future
+
+- Do additional research on Python, which is the language that we
+currently plan on coding our project in
+
+- Find / download files that contain historical data on the stock market
+that can be used in the creation of our algorithms
+
+- Develop our own algorithm for predicting the stock market based on our
+own examinations of current algorithms
+
+- Do additional research on different types of data structures and
+decide on which ones would be best for accomplishing our project's
+goals
+
+
+
+Rubric:
+
+15 points: Identify and impliment the best kind of data structure for
+this project
+
+15 points: Create an algorithm / series of algorithms that predicts or
+simulations the future of the stock market
+
+10 points: Research and use the Python language with our code
