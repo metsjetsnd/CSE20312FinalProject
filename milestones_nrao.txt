@@ -1,0 +1,34 @@
+*Nathan Rao project milestones
+
+Milestones
+==========
+
+1. Research financial markets and learn about how they work, what
+areas we would like to work in, and connect the gathered information
+to data structures in some way.
+
+2. Research current predictive market algorithms and determine how
+they apply to their financial sector and how data structures can more
+effectively handle and manipulate data.
+
+3. Determine how to export data from various files on the financial 
+market into manipulatable data in Python.
+
+4. Apply research to begin development of a data structures centered
+algorithm for determining investments.
+
+
+Rubric
+======
+
+1. 15 points:	Researching the types of financial markets and sectors
+		and identifying possible candidates for the final project
+
+2. 15 points:	Researching current algorithms and determining if all
+		new algorithms or updating and improving current algorithms
+		would be more logical to program.
+
+3. 10 points:	Learning how to import files such as spreadsheets into 
+		readable data in Python.  (compilable part of rubric)
+
+4. EXTRA:	Begin programming process
