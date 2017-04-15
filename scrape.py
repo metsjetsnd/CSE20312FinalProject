@@ -11,7 +11,10 @@ link = 'http://www.alphavantage.co/query?function=' + function + '&symbol=' + sy
 #headers  = {'user-agent': 'reddit-{}'.format(os.environ['USER'])}
 r = requests.get(link)
 
-print r.json()
+data = r.json()
+
+for resource in data['Time Series (Daily)'][]:
+	print resource['Time Series (Daily)'][].get('4. close', None)
 
 
 """data = r.json()["data"]
