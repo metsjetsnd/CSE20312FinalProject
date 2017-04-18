@@ -1,50 +1,132 @@
 #!/usr/bin/env python2.7
 
 import requests
-import calendar
+import sys
+import csv
+import os
 
-function = 'TIME_SERIES_DAILY'
-symbol = 'AAPL'
-apikey = 'ZK41'
-link = 'http://www.alphavantage.co/query?function=' + function + '&symbol=' + symbol + '&apikey=' + apikey
+def usage(status=0):
+    print '''Usage: {} [ -l LENGTH -s SYMBOL ]
+    -l LENGTH        How many days to use for time average (recommended: 10)
+    -s SYMBOL        Symbol for desired stock (if no symbol, display list of top 10 recommended stocks)
+    '''.format(
+        os.path.basename(sys.argv[0])
+    )
+    sys.exit(status)
 
-#headers  = {'user-agent': 'reddit-{}'.format(os.environ['USER'])}
-r = requests.get(link)
+# Parse command line options
 
-print r.json()
+length = 10
+args = sys.argv[1:]
+singleStock = 0
 
-
-"""data = r.json()["data"]
-children = data["children"]
-
-printed = 1
-for count, child in enumerate(children):
-
-    details = child["data"]
-    if FIELD in details:
-        z = details[FIELD]
+while len(args) and args[0].startswith('-') and len(args[0]) > 1:
+    arg = args.pop(0)
+    if arg == '-s':
+       symbol = args.pop(0)
+       singleStock = 1
+    elif arg == '-l':
+       length = int(args.pop(0))
+    elif arg == '-h':
+       usage(0)
     else:
-        print "Invalid Field"
-        sys.exit(1)
-    l = 'http://www.reddit.com' + details["permalink"]
-    if REGEX[0] == True:
-        search = re.findall(REGEX[1], z)
-        if search:
-            print '{:3d}'.format(printed) + '.' , '{:8}'.format('Title:'), z
-            print '{:13}'.format('     Author:'), details["author"]
-            print '{:13}'.format('     Link:'), 'http://www.reddit.com' + l
-            t = requests.get('http://is.gd/create.php', params={'format':'json', 'url':l})
-            print '{:13}'.format('     Short:'), t.json()['shorturl']
-            printed = printed + 1
-            if printed == NUMBER + 1:
-                break
-        else:
+       usage(1)
+
+
+if singleStock:
+    function = 'TIME_SERIES_DAILY'
+    apikey = 'ZK41'
+    link = 'http://www.alphavantage.co/query?function=' + function + '&symbol=' + symbol + '&apikey=' + apikey
+
+    r = requests.get(link)
+
+    data = r.json()
+    dates = data['Time Series (Daily)'].keys()
+    dates.sort();
+
+    closePrices = []
+
+    for i in range(1, length + 1):
+        closePrices.append(float(data['Time Series (Daily)'][dates[-1 * i]].get('4. close', None)))
+        print data['Time Series (Daily)'][dates[-1 * i]].get('4. close', None)
+
+    priceSum = 0
+    for i in range(0, length):
+        priceSum += closePrices[i]
+
+    mean = priceSum / length
+    if closePrices[0] < mean:
+        print "Suggestion: BUY"
+    else:
+        print "Suggestion: SELL"
+
+else:
+    sp500link = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/master/data/constituents.csv"
+    r = requests.get(sp500link)
+    fileName = 'indexes.csv'
+    indexes = []
+
+    with open(fileName, 'w') as file:
+        file.writelines(r.content)
+
+    with open(fileName, 'r') as file:
+        reader = csv.reader(file, delimiter=',')
+        l = list(reader)
+        for stock in l:
+            indexes.append(stock[0])
+
+    stockRank = []
+
+    for count, index in enumerate(indexes):
+        if count is 0:
             continue
-    else:
-        print '{:3d}'.format(count + 1) + '.' , '{:8}'.format('Title:'), z
-        print '{:13}'.format('     Author:'), details["author"]
-        print '{:13}'.format('     Link:'), 'http://www.reddit.com' + l
-        t = requests.get('http://is.gd/create.php', params={'format':'json', 'url':l})
-        print '{:13}'.format('     Short:'), t.json()['shorturl']
-        if count == NUMBER - 1:
-            break"""
+        if count > 50:
+            break
+        if '.' in index:
+            continue
+        function = 'TIME_SERIES_DAILY'
+        apikey = 'ZK41'
+        link = 'http://www.alphavantage.co/query?function=' + function + '&symbol=' + index + '&apikey=' + apikey
+
+        r = requests.get(link)
+        print 'Processing', index, '...'
+        data = r.json()
+        dates = data['Time Series (Daily)'].keys()
+        dates.sort();
+
+        closePrices = []
+
+        for i in range(1, length + 1):
+            closePrices.append(float(data['Time Series (Daily)'][dates[-1 * i]].get('4. close', None)))
+
+        priceSum = 0
+        for i in range(0, length):
+            priceSum += closePrices[i]
+
+        mean = priceSum / length
+        percentDiff = closePrices[0] / mean
+        tup = (percentDiff, index)
+        if count < 11:
+            stockRank.append(tup)
+            stockRank.sort()
+        else:
+            myTuple = stockRank[9]
+            percent = myTuple[0]
+            if percentDiff < percent:
+                stockRank.pop()
+                stockRank.append(tup)
+                stockRank.sort()
+    print
+    print 
+    print "Top 10"
+    for count, stock in enumerate(stockRank):
+        print count + 1, stock[1], stock[0]
+            
+
+
+
+
+
+
+
+
