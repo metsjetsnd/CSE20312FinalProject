@@ -98,18 +98,11 @@ indexes = []
 with open(fileName, 'w') as file:
     file.writelines(r.content)
 
-<<<<<<< HEAD
 with open(fileName, 'r') as file:
     reader = csv.reader(file, delimiter=',')
     l = list(reader)
     for stock in l:
         indexes.append(stock[0])
-=======
-data = r.json()
-
-for resource in data['Time Series (Daily)'][]:
-	print resource['Time Series (Daily)'][].get('4. close', None)
->>>>>>> 24b8d76cf27714e1c1f3c2fbb85ae707f6b169b6
 
 if SP500MACD:
     for count, index in enumerate(indexes):
@@ -154,15 +147,12 @@ elif singleStock:
         print "Suggestion: WEAK SELL" 
 
 else:
-
-
     #stockRank = [] # Priority Queue for ranking stocks
     q = Queue.PriorityQueue()
 
     for count, index in enumerate(indexes):
         if count is 0:
             continue
-<<<<<<< HEAD
         if count > 50:
             break
         if '.' in index:
@@ -193,13 +183,3 @@ else:
     for i in range(10):
         stock = q.get()
         print i + 1, stock[1], stock[0]
-=======
-    else:
-        print '{:3d}'.format(count + 1) + '.' , '{:8}'.format('Title:'), z
-        print '{:13}'.format('     Author:'), details["author"]
-        print '{:13}'.format('     Link:'), 'http://www.reddit.com' + l
-        t = requests.get('http://is.gd/create.php', params={'format':'json', 'url':l})
-        print '{:13}'.format('     Short:'), t.json()['shorturl']
-        if count == NUMBER - 1:
-            break"""
->>>>>>> 24b8d76cf27714e1c1f3c2fbb85ae707f6b169b6
