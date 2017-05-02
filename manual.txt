@@ -1,0 +1,54 @@
+Stock Market Analysis/Predictor
+Shane Brosnan, Joseph Spencer, Nathan Rao
+CSE 20312-01
+
+User Manual:
+For our final project, we created a Stock Market Analysis/Predictor. To do this, we utilized the Alpha Vantage API 
+(http://www.alphavantage.co) to obtain data pertaining to the market. Using this scraped data, we created a Python script that 
+took this data and ran it through a variety of algorithms in order to determine whether or not it would be advantageous to buy 
+or sell a stock. The algorithms that we used were Mean Reversion and Moving Average Convergence/Divergence (MACD). These 
+algorithms can be run on a specific stock or the entire S&P 500 depending on the user’s preference. 
+
+In order to test our algorithms, we used dummy data to feed into our program so that we can verify the output. We used made up 
+data for both of the algorithms that we expected would have a specific output, such as a strong buy or a strong sell, and 
+verified that the program outputted what we expected. Because the program successfully outputted the expected results, we were 
+able to verify that our algorithms work correctly and can be used to accurately examine real world data.
+
+As far as data structures go, we utilized a Priority queue to store the top 10 recommended stocks when we iterate and run the 
+algorithm through on the S&P 500. We also used a list to store the closing price data on a stock. Finally, we used 
+dictionaries and lists when we parsed the JSON data.
+
+For our project, all that is needed to run our program is for one to run the executable in the command line. Along with the 
+executable, the user can also add certain flags to the command line in order to specify what kind of output they are looking 
+for. The “-h” flag can be used to output the usage function which describes all of the available flags. If the “-m” flag is 
+added to the command line, then the program will run using the MACD algorithm on every stock in the S&P 500. If this flag is 
+not specified, then the program will run with the default algorithm, which is mean reversion. The user can add the “-l” flag 
+followed by a number, which indicates the number of days the user wants to examine for the time average. If this flag is not 
+passed, then the default length of 10 will be used. Finally, the user can pass the “-s” flag followed by a symbol for a 
+specific stock. The program will then run for only the specified stock. Otherwise, the program will run for the entire S&P 500 
+and output a list of the top 10 recommended stocks. 
+
+Time Log:
+Joey:
+1.5 hours - reviewing notes / powerpoint slides on Python from Systems Programming course
+3 hours - Going through Python tutorials & readings
+7 hours - group meetings 
+1.5 hour - writing final project report
+.5 hours- presentation slides
+
+Shane:
+4.5 hours- researched stock market and trading algorithms 
+.5 hours- programmed algorithm simulation on dummy data set (spring break)
+7 hours - group meetings
+.5 hours- writing python script to scrape data from Yahoo Finance
+.5 hours - presentation slides
+
+Nathan:
+1 hour - reviewing Python code
+3 hours - researching stock market
+7 hours - group meetings
+.5 hours - presentation slides
+
+Repository:
+https://github.com/metsjetsnd/CSE20312FinalProject
+
