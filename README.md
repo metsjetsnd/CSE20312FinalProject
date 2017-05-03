@@ -2,4 +2,4 @@
 
 Shane Brosnan, Nathan Rao, and Joseph Spencer
 
-Final Project Description:
+All final code is in scrape.py
