@@ -32,6 +32,8 @@ def getClosePrices(function, symbol, apikey, length, printPrices):
     closePrices = []
     
     # append closePrices array and output the data if specified
+    if printPrices:
+        print "Close prices over last {} days".format(length)
     for i in range(1, length + 1):
         closePrices.append(float(data['Time Series (Daily)'][dates[-1 * i]].get('4. close', None)))
         if printPrices:
@@ -59,7 +61,7 @@ def getMean(function, symbol, apikey, length, printPrices):
 
 #MACD function, used when running MACD algorithm
 def MACD(function, symbol, interval, series_type, apikey, length):
-    # scrape json data for MACD using API
+    #get json data for MACD from API
     link = 'http://www.alphavantage.co/query?function=' + function + '&symbol=' + symbol + '&interval=' + interval + '&series_type=' + series_type + '&apikey=' + apikey
     r = requests.get(link)
     data = r.json()
