@@ -11,7 +11,7 @@ import Queue
 #Usage function, called when -h flag or an incorrect flag is passed as a command line argument
 def usage(status=0):
     print '''Usage: {} [ -l LENGTH -s SYMBOL ]
-    -l LENGTH        How many days to use for time average (recommended: 30) (max: 100
+    -l LENGTH        How many days to use for time average (recommended: 30) (max: 100)
     -s SYMBOL        Symbol for desired stock (if no symbol, display list of top 10 recommended stocks from S&P 500)
     -m               MACD will run on every stock in S&P 500 and display any indexes with buy recommendations
     '''.format(
@@ -22,14 +22,16 @@ def usage(status=0):
 #Get Close Prices function, called when mean reversion algorithm is run
 #Downloads appropriate data from API and returns a list containing the closing prices from the past (length) days
 def getClosePrices(function, symbol, apikey, length, printPrices):
+    # scrape json data
     link = 'http://www.alphavantage.co/query?function=' + function + '&symbol=' + symbol + '&apikey=' + apikey
-
     r = requests.get(link)
-
     data = r.json()
     dates = data['Time Series (Daily)'].keys()
+
     dates.sort();#sort dates so data is iterated through in chronological order
     closePrices = []
+    
+    # append closePrices array and output the data if specified
     for i in range(1, length + 1):
         closePrices.append(float(data['Time Series (Daily)'][dates[-1 * i]].get('4. close', None)))
         if printPrices:
@@ -43,9 +45,12 @@ def getMean(function, symbol, apikey, length, printPrices):
     closePrices = getClosePrices(function, symbol, apikey, length, printPrices)
 
     priceSum = 0
+    
+    # calculate total sum of all of the closing prices
     for i in range(0, length):
         priceSum += closePrices[i]
 
+    # calculate and return mean value
     mean = priceSum / length
     data = []
     data.append(mean)
@@ -54,17 +59,18 @@ def getMean(function, symbol, apikey, length, printPrices):
 
 #MACD function, used when running MACD algorithm
 def MACD(function, symbol, interval, series_type, apikey, length):
+    # scrape json data for MACD using API
     link = 'http://www.alphavantage.co/query?function=' + function + '&symbol=' + symbol + '&interval=' + interval + '&series_type=' + series_type + '&apikey=' + apikey
-
     r = requests.get(link)
-
     data = r.json()
     dates = data['Technical Analysis: MACD'].keys()
     dates.sort();
+
     indicatorNow = float(data['Technical Analysis: MACD'][dates[-1]].get('MACD', None))
     signalNow = float(data['Technical Analysis: MACD'][dates[-1]].get('MACD_Signal', None))
     indicatorLast = float(data['Technical Analysis: MACD'][dates[-2]].get('MACD', None))
     signalLast = float(data['Technical Analysis: MACD'][dates[-2]].get('MACD_Signal', None))
+
     
     if indicatorNow - signalNow > 0 and indicatorLast - signalLast < 0:
         return 1
@@ -74,7 +80,7 @@ def MACD(function, symbol, interval, series_type, apikey, length):
         return 0
 
 
-# Main portion of code
+# MAIN PORTION OF CODE
 
 length = 30
 args = sys.argv[1:]
