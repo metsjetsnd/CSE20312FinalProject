@@ -11,7 +11,7 @@ import Queue
 #Usage function, called when -h flag or an incorrect flag is passed as a command line argument
 def usage(status=0):
     print '''Usage: {} [ -l LENGTH -s SYMBOL ]
-    -l LENGTH        How many days to use for time average (recommended: 10)
+    -l LENGTH        How many days to use for time average (recommended: 30) (max: 100
     -s SYMBOL        Symbol for desired stock (if no symbol, display list of top 10 recommended stocks from S&P 500)
     -m               MACD will run on every stock in S&P 500 and display any indexes with buy recommendations
     '''.format(
@@ -76,7 +76,7 @@ def MACD(function, symbol, interval, series_type, apikey, length):
 
 # Main portion of code
 
-length = 10
+length = 30
 args = sys.argv[1:]
 singleStock = 0
 SP500MACD = 0
@@ -89,6 +89,9 @@ while len(args) and args[0].startswith('-') and len(args[0]) > 1:
        singleStock = 1
     elif arg == '-l':
        length = int(args.pop(0))
+       if (length > 100):
+          print "Length can not be longer than 100. Length will be set at max length of 100"
+          length = 100
     elif arg == '-m':
         SP500MACD = 1
     elif arg == '-h':
