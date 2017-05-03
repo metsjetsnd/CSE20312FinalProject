@@ -24,6 +24,7 @@ Shane:
 .5 hours- programmed algorithm simulation on dummy data set (spring break)
 7 hours - group meetings
 1.5 hours- writing python script to utilize data from API
+3 hours- additional time writing/testing scrape.py
 .5 hours - presentation slides
 
 Nathan:
