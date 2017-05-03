@@ -130,8 +130,6 @@ if SP500MACD:
     for count, index in enumerate(indexes):
         if count is 0:
             continue
-        if count > 50:
-            break
         if '.' in index:
             continue
         MACDResult = MACD('MACD', index, 'daily', 'close', apikey, length)
@@ -158,25 +156,36 @@ elif singleStock:
 
     if data[1][0] < data[0] and MACDResult == 1:#Passes both algorithms
         print "MACD Result: BUY"
+        print "Mean Reversion Result: BUY"
         print "Suggestion: STRONG BUY"
+    elif data[1][0] < data[0] and MACDResult == -1:#Passes mean reversion, expilicitly fails MACD
+        print "MACD Result: SELL"
+        print "Mean Reversion Result: BUY"
+        print "Suggestion: INCONCLUSIVE"
     elif data[1][0] < data[0]:#Passes mean reversion only
-        print "MACD Result: Inconclusive"
+        print "MACD Result: INCONCLUSIVE"
+        print "Mean Reversion Result: BUY"
         print "Suggestion: WEAK BUY"
     elif data[1][0] > data[0] and MACDResult == -1: #Fails both algorithms
         print "MACD Result: SELL"
+        print "Mean Reversion Result: SELL"
         print "Suggestion: STRONG SELL"
+    elif data[1][0] > data[0] and MACDResult == 1: #Passes MACD, fails Mean Reversion
+        print "MACD Result: BUY"
+        print "Mean Reversion Result: SELL"
+        print "Suggestion: INCONCLUSIVE"
     else:
-        print "MACD Result: Inconclusive"
+        print "MACD Result: INCONCLUSIVE"
+        print "Mean Reversion Result: SELL"
         print "Suggestion: WEAK SELL" 
 
+#Run only Mean Reversion algorithm on each of S&P 500 Indexes
 else:
     q = Queue.PriorityQueue() #Priority Queue for holding top 10 stocks
 
     for count, index in enumerate(indexes):
         if count is 0:
             continue
-        if count > 50:
-            break
         if '.' in index:
             continue
         print 'Processing', index, '...'
