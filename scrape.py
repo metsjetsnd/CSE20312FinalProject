@@ -26,6 +26,9 @@ def getClosePrices(function, symbol, apikey, length, printPrices):
     link = 'http://www.alphavantage.co/query?function=' + function + '&symbol=' + symbol + '&apikey=' + apikey
     r = requests.get(link)
     data = r.json()
+    if data['Error Message']:
+        print "Could not process stock", symbol, "from API"
+        sys.exit(1)
     dates = data['Time Series (Daily)'].keys()
 
     dates.sort();#sort dates so data is iterated through in chronological order
