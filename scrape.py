@@ -11,7 +11,7 @@ import Queue
 #Usage function, called when -h flag or an incorrect flag is passed as a command line argument
 def usage(status=0):
     print '''Usage: {} [ -l LENGTH -s SYMBOL ]
-    -l LENGTH        How many days to use for time average (recommended: 30) (max: 100)
+    -l LENGTH        How many days to use for time average (recommended: 10) (max: 10)
     -s SYMBOL        Symbol for desired stock (if no symbol, display list of top 10 recommended stocks from S&P 500)
     -m               MACD will run on every stock in S&P 500 and display any indexes with buy recommendations
     '''.format(
@@ -26,7 +26,7 @@ def getClosePrices(function, symbol, apikey, length, printPrices):
     link = 'http://www.alphavantage.co/query?function=' + function + '&symbol=' + symbol + '&apikey=' + apikey
     r = requests.get(link)
     data = r.json()
-    if data['Error Message']:
+    if 'Error Message' in data:
         print "Could not process stock", symbol, "from API"
         sys.exit(1)
     dates = data['Time Series (Daily)'].keys()
@@ -87,7 +87,7 @@ def MACD(function, symbol, interval, series_type, apikey, length):
 
 # MAIN PORTION OF CODE
 
-length = 30
+length = 10
 args = sys.argv[1:]
 singleStock = 0
 SP500MACD = 0
@@ -100,9 +100,9 @@ while len(args) and args[0].startswith('-') and len(args[0]) > 1:
        singleStock = 1
     elif arg == '-l':
        length = int(args.pop(0))
-       if (length > 100):
-          print "Length can not be longer than 100. Length will be set at max length of 100"
-          length = 100
+       if (length > 10):
+          print "Length can not be longer than 10. Length will be set at max length of 10"
+          length = 10
     elif arg == '-m':
         SP500MACD = 1
     elif arg == '-h':
